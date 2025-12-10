@@ -57,7 +57,7 @@ Thumbs.db
 nul
 
 # Docker
-.dockerignore
+# .dockerignore - NEEDED for deployment, don't ignore
 docker-compose.override.yml
 
 # Build artifacts

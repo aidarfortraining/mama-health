@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+.vitest/
+e2e/
+playwright-report/
+test-results/
+
+# Build (will be created during build)
+dist/
+dist-ssr/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+*.log
+
+# Documentation
+README.md
+*.md
+
+# Config files not needed in container
+vitest.config.ts
+playwright.config.ts
+eslint.config.js
+# tsconfig*.json - NEEDED FOR BUILD, do not ignore!
