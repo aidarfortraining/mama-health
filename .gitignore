@@ -55,3 +55,20 @@ Thumbs.db
 
 # Windows reserved names
 nul
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Build artifacts
+*.tar.gz
+*.zip
+
+# Test reports
+coverage/
+test-results/
+playwright-report/
+htmlcov/
+
+# Render specific
+.render/

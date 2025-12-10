@@ -1,6 +1,15 @@
 import type { ArithmeticResponse, ReadingText, StroopResponse, MemoryWordsResponse, ExerciseResult } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Support runtime environment variables (Docker) and build-time variables (Vite)
+declare global {
+  interface Window {
+    ENV?: {
+      VITE_API_URL?: string;
+    };
+  }
+}
+
+const API_URL = window.ENV?.VITE_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const api = {
   async getArithmeticProblems(): Promise<ArithmeticResponse> {

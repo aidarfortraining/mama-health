@@ -1,0 +1,67 @@
+# Render.com Blueprint for Brain Training Application
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API Service (FastAPI)
+  - type: web
+    name: brain-training-api
+    runtime: docker
+    region: oregon # Free tier available in oregon
+    plan: free # Free tier (spins down after 15 min of inactivity)
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: DATABASE_URL
+        value: sqlite+aiosqlite:///./data/brain_training.db
+      - key: PYTHON_VERSION
+        value: "3.11"
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Frontend Static Site (React + Vite)
+  - type: web
+    name: brain-training-frontend
+    runtime: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: API_URL
+        # This will be the URL of your backend service
+        # Replace with actual backend URL after first deploy
+        fromService:
+          type: web
+          name: brain-training-api
+          envVarKey: RENDER_EXTERNAL_URL
+    healthCheckPath: /health
+    autoDeploy: true
+
+# Alternative: Static Site (simpler but requires build step on Render)
+# Uncomment this and remove the frontend web service above if preferred
+#
+# - type: static
+#   name: brain-training-frontend-static
+#   runtime: static
+#   buildCommand: npm ci && npm run build
+#   staticPublishPath: ./dist
+#   pullRequestPreviewsEnabled: true
+#   headers:
+#     - path: /*
+#       name: X-Frame-Options
+#       value: SAMEORIGIN
+#     - path: /*
+#       name: X-Content-Type-Options
+#       value: nosniff
+#   routes:
+#     - type: rewrite
+#       source: /*
+#       destination: /index.html
+#   envVars:
+#     - key: VITE_API_URL
+#       fromService:
+#         type: web
+#         name: brain-training-api
+#         envVarKey: RENDER_EXTERNAL_URL
