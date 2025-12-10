@@ -53,11 +53,24 @@ export function ExercisePage() {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
+    <div className="min-h-screen px-4 py-6 sm:p-6 md:p-8 animate-fade-in">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-4">
-          <Button variant="outline" onClick={() => navigate('/')}>
-            Назад
+        <div className="mb-4 md:mb-6">
+          <Button
+            variant="outline"
+            size="small"
+            onClick={() => navigate('/')}
+            className="group"
+          >
+            <svg
+              className="w-4 h-4 transform transition-transform group-hover:-translate-x-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Назад</span>
           </Button>
         </div>
         {renderExercise()}

@@ -38,56 +38,83 @@ export function ReadingExercise({ onComplete }: ReadingExerciseProps) {
   if (loading || !text) {
     return (
       <Card className="max-w-3xl mx-auto text-center">
-        <p className="text-body">Загрузка текста...</p>
+        <div className="py-8">
+          <div className="animate-spin w-12 h-12 sm:w-16 sm:h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-base sm:text-lg md:text-xl text-gray-600">Загрузка текста...</p>
+        </div>
       </Card>
     );
   }
 
   return (
     <Card className="max-w-3xl mx-auto">
-      <div className="text-center mb-6">
-        <h1 className="text-heading">Чтение вслух</h1>
+      <div className="text-center mb-4 md:mb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+          📖 Чтение вслух
+        </h1>
       </div>
 
       {phase === 'ready' && (
-        <div className="text-center">
-          <p className="text-body mb-6 text-gray-700">
-            Прочитайте следующий текст вслух, чётко и внятно.
-          </p>
-          <p className="text-small text-gray-500 mb-8">
-            {text.word_count} слов
-          </p>
-          <Button size="large" onClick={handleStart}>
-            НАЧАТЬ ЧТЕНИЕ
-          </Button>
+        <div className="text-center animate-fade-in">
+          <div className="mb-8 p-6 sm:p-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl border-2 border-green-100 shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-800 leading-relaxed font-medium mb-4">
+              Прочитайте следующий текст вслух, чётко и внятно
+            </p>
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-sm border border-green-200">
+              <span className="text-2xl">📄</span>
+              <div className="text-left">
+                <p className="text-xs text-gray-500">Количество слов</p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900">
+                  {text.word_count}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <Button size="large" onClick={handleStart} className="w-full sm:w-auto">
+              <span className="text-2xl md:text-3xl">▶️</span>
+              <span>НАЧАТЬ ЧТЕНИЕ</span>
+            </Button>
+          </div>
         </div>
       )}
 
       {phase === 'reading' && (
-        <>
-          <Timer formatted={timer.formatted} label="Время чтения" />
+        <div className="animate-fade-in">
+          <div className="mb-8">
+            <Timer formatted={timer.formatted} label="Время чтения" />
+          </div>
 
-          <div className="my-8 p-6 bg-gray-50 rounded-xl">
+          <div className="my-6 md:my-8 p-5 sm:p-6 md:p-8 bg-gradient-to-br from-gray-50 to-green-50 rounded-2xl shadow-lg border-2 border-gray-200">
             {text.title && (
-              <h2 className="text-large font-semibold mb-4 text-center">{text.title}</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 text-center text-gray-900 pb-4 border-b-2 border-gray-300">
+                {text.title}
+              </h2>
             )}
-            <p className="text-body leading-relaxed text-gray-800">
+            <p className="text-lg sm:text-xl md:text-2xl leading-relaxed text-gray-800 whitespace-pre-line">
               {text.content}
             </p>
           </div>
 
           <div className="text-center">
-            <Button size="large" variant="success" onClick={handleDone}>
-              ПРОЧИТАНО
+            <Button size="large" variant="success" onClick={handleDone} className="w-full sm:w-auto">
+              <span className="text-2xl md:text-3xl">✓</span>
+              <span>ПРОЧИТАНО</span>
             </Button>
           </div>
-        </>
+        </div>
       )}
 
       {phase === 'done' && (
-        <div className="text-center">
-          <p className="text-heading text-success mb-4">Отлично!</p>
-          <p className="text-body">Время чтения: {timer.formatted}</p>
+        <div className="text-center animate-fade-in">
+          <div className="text-6xl sm:text-7xl md:text-8xl mb-6 animate-bounce-in">🎉</div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl text-success font-bold mb-6">Отлично!</h2>
+          <div className="inline-block px-8 py-5 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl shadow-lg border-2 border-green-100">
+            <p className="text-sm sm:text-base text-gray-600 mb-2 font-medium">Время чтения:</p>
+            <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary">
+              {timer.formatted}
+            </p>
+          </div>
         </div>
       )}
     </Card>

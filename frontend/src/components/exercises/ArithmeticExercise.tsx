@@ -101,7 +101,10 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   if (loading || currentOptions.length === 0) {
     return (
       <Card className="max-w-2xl mx-auto text-center">
-        <p className="text-body">Загрузка...</p>
+        <div className="py-8">
+          <div className="animate-spin w-12 h-12 sm:w-16 sm:h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-base sm:text-lg md:text-xl text-gray-600">Загрузка упражнения...</p>
+        </div>
       </Card>
     );
   }
@@ -110,8 +113,10 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
 
   return (
     <Card className="max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <h1 className="text-heading mb-4">Арифметика</h1>
+      <div className="text-center mb-4 md:mb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          ➕ Арифметика
+        </h1>
         <ProgressBar
           current={currentIndex + 1}
           total={problems.length}
@@ -119,22 +124,34 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
         />
       </div>
 
-      <Timer
-        formatted={timer.formatted}
-        isWarning={timer.seconds < 30}
-      />
-
-      <div className="my-8 text-center">
-        <p className="text-display">
-          {currentProblem.expression} = ?
-        </p>
+      <div className="mb-4 md:mb-6">
+        <Timer
+          formatted={timer.formatted}
+          isWarning={timer.seconds < 30}
+        />
       </div>
 
+      {/* Problem display */}
+      <div className="my-6 md:my-8 text-center">
+        <div className="inline-block bg-gradient-to-br from-blue-50 to-purple-50 px-6 py-4 sm:px-8 sm:py-6 rounded-2xl shadow-md border-2 border-blue-100">
+          <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
+            {currentProblem.expression} = ?
+          </p>
+        </div>
+      </div>
+
+      {/* Answer options with feedback animation */}
       <div
-        className={`grid grid-cols-2 gap-4 transition-all ${
-          feedback === 'correct' ? 'bg-green-100' :
-          feedback === 'wrong' ? 'bg-red-100' : ''
-        } rounded-xl p-4`}
+        className={`
+          grid grid-cols-2 gap-3 sm:gap-4
+          transition-all duration-300
+          rounded-2xl p-3 sm:p-4 md:p-5
+          ${feedback === 'correct'
+            ? 'bg-gradient-to-br from-green-50 to-green-100 shadow-lg animate-bounce-in'
+            : feedback === 'wrong'
+            ? 'bg-gradient-to-br from-red-50 to-red-100 animate-shake'
+            : 'bg-transparent'}
+        `}
       >
         {currentOptions.map((option, idx) => (
           <Button
@@ -142,17 +159,44 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
             variant="outline"
             size="large"
             onClick={() => handleAnswer(option)}
-            className="text-heading"
+            disabled={feedback !== null}
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold hover:scale-105 active:scale-95 transition-all min-h-[72px] sm:min-h-[80px]"
           >
             {option}
           </Button>
         ))}
       </div>
 
-      <div className="mt-6 text-center">
-        <p className="text-body text-gray-600">
-          Правильных: <span className="text-success font-bold">{correctCount}</span>
-        </p>
+      {/* Visual feedback indicator */}
+      {feedback && (
+        <div className="mt-4 text-center animate-fade-in">
+          {feedback === 'correct' ? (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-success text-white rounded-full shadow-lg">
+              <span className="text-2xl">✓</span>
+              <span className="font-semibold">Правильно!</span>
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-danger text-white rounded-full shadow-lg">
+              <span className="text-2xl">✗</span>
+              <span className="font-semibold">Неверно</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Stats display */}
+      <div className="mt-6 flex items-center justify-center gap-6 sm:gap-8">
+        <div className="text-center">
+          <p className="text-xs sm:text-sm text-gray-500 mb-1">Правильных</p>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-success">{correctCount}</p>
+        </div>
+        <div className="h-10 sm:h-12 w-px bg-gray-300" />
+        <div className="text-center">
+          <p className="text-xs sm:text-sm text-gray-500 mb-1">Осталось</p>
+          <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-700">
+            {problems.length - currentIndex - 1}
+          </p>
+        </div>
       </div>
     </Card>
   );

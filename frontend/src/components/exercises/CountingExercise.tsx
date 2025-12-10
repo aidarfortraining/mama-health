@@ -25,52 +25,71 @@ export function CountingExercise({ onComplete }: CountingExerciseProps) {
 
   return (
     <Card className="max-w-2xl mx-auto text-center">
-      <h1 className="text-heading mb-6">Счёт вслух</h1>
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-8">
+        🔢 Счёт вслух
+      </h1>
 
       {phase === 'ready' && (
-        <>
-          <p className="text-body mb-8 text-gray-700">
-            Считайте вслух от <strong>1 до 120</strong> как можно быстрее и чётче.
-          </p>
-          <Button size="large" onClick={handleStart}>
-            СТАРТ
+        <div className="animate-fade-in">
+          <div className="mb-8 p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border-2 border-blue-100 shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-800 leading-relaxed font-medium">
+              Считайте вслух от <span className="text-primary font-bold text-xl sm:text-2xl md:text-3xl">1 до 120</span>
+            </p>
+            <p className="text-sm sm:text-base text-gray-600 mt-3">
+              Произносите числа как можно быстрее и чётче
+            </p>
+          </div>
+          <Button size="large" onClick={handleStart} className="w-full sm:w-auto">
+            <span className="text-2xl md:text-3xl">▶️</span>
+            <span>СТАРТ</span>
           </Button>
-        </>
+        </div>
       )}
 
       {phase === 'counting' && (
-        <>
-          <div className="mb-8">
-            <div className="flex items-center justify-center gap-8 mb-6">
-              <div className="text-center">
-                <div className="text-display text-primary font-bold">1</div>
-                <div className="text-small text-gray-500">Начало</div>
+        <div className="animate-fade-in">
+          <div className="mb-8 p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-100 shadow-inner">
+            <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8 mb-6">
+              <div className="text-center bg-white px-5 py-4 sm:px-7 sm:py-5 rounded-2xl shadow-md border border-blue-200">
+                <div className="text-4xl sm:text-5xl md:text-6xl text-primary font-bold">1</div>
+                <div className="text-xs sm:text-sm text-gray-600 mt-2 font-medium">Начало</div>
               </div>
-              <div className="text-heading text-gray-400">→</div>
-              <div className="text-center">
-                <div className="text-display text-primary font-bold">120</div>
-                <div className="text-small text-gray-500">Конец</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl text-primary font-bold animate-pulse">→</div>
+              <div className="text-center bg-white px-5 py-4 sm:px-7 sm:py-5 rounded-2xl shadow-md border border-blue-200">
+                <div className="text-4xl sm:text-5xl md:text-6xl text-primary font-bold">120</div>
+                <div className="text-xs sm:text-sm text-gray-600 mt-2 font-medium">Конец</div>
               </div>
             </div>
-            <p className="text-large text-gray-700 font-semibold">Считайте вслух от 1 до 120!</p>
-            <p className="text-body text-gray-500 mt-2">Произносите числа чётко и громко</p>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-800 font-bold mb-2">
+              Считайте вслух от 1 до 120!
+            </p>
+            <p className="text-sm sm:text-base text-gray-600">
+              Произносите числа чётко и громко
+            </p>
           </div>
 
-          <Timer formatted={timer.formatted} label="Время" />
-
-          <div className="mt-8">
-            <Button size="large" variant="success" onClick={handleDone}>
-              ГОТОВО
-            </Button>
+          <div className="mb-8">
+            <Timer formatted={timer.formatted} label="Время" />
           </div>
-        </>
+
+          <Button size="large" variant="success" onClick={handleDone} className="w-full sm:w-auto">
+            <span className="text-2xl md:text-3xl">✓</span>
+            <span>ГОТОВО</span>
+          </Button>
+        </div>
       )}
 
       {phase === 'done' && (
-        <>
-          <p className="text-heading text-success mb-4">Отлично!</p>
-          <p className="text-body">Ваше время: {timer.formatted}</p>
-        </>
+        <div className="animate-fade-in">
+          <div className="text-6xl sm:text-7xl md:text-8xl mb-6 animate-bounce-in">🎉</div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl text-success font-bold mb-6">Отлично!</h2>
+          <div className="inline-block px-8 py-5 bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl shadow-lg border-2 border-green-100">
+            <p className="text-sm sm:text-base text-gray-600 mb-2 font-medium">Ваше время:</p>
+            <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary">
+              {timer.formatted}
+            </p>
+          </div>
+        </div>
       )}
     </Card>
   );
