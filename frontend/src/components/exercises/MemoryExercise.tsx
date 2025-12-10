@@ -33,6 +33,7 @@ export function MemoryExercise({ onComplete }: MemoryExerciseProps) {
       setPhase('memorize');
       memorizeTimer.start();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const finishExercise = () => {

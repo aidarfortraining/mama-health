@@ -33,6 +33,7 @@ export function StroopExercise({ onComplete }: StroopExerciseProps) {
       setLoading(false);
       timer.start();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const finishExercise = () => {

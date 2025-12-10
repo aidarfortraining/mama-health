@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { beforeEach, vi } from 'vitest';
 
 // Mock window.matchMedia for responsive tests
 Object.defineProperty(window, 'matchMedia', {

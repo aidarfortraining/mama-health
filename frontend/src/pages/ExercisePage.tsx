@@ -6,7 +6,7 @@ import { ReadingExercise } from '../components/exercises/ReadingExercise';
 import { StroopExercise } from '../components/exercises/StroopExercise';
 import { MemoryExercise } from '../components/exercises/MemoryExercise';
 import { Button } from '../components/common/Button';
-import type { SessionResults } from '../types';
+import type { SessionResults, ExerciseResult } from '../types';
 
 const exerciseOrder = ['counting', 'arithmetic', 'reading', 'stroop', 'memory'];
 
@@ -16,7 +16,10 @@ export function ExercisePage() {
   const [results, setResults] = useState<SessionResults>({});
   const [currentExercise, setCurrentExercise] = useState(type || 'counting');
 
-  const handleComplete = (exerciseType: string, result: any) => {
+  const handleComplete = (
+    exerciseType: string,
+    result: ExerciseResult | { time_seconds: number } | { completed: boolean; time_seconds: number }
+  ) => {
     setResults(prev => ({ ...prev, [exerciseType]: result }));
 
     const currentIndex = exerciseOrder.indexOf(exerciseType);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTimer } from '../../hooks/useTimer';
 import { api } from '../../services/api';
 import { Button } from '../common/Button';
@@ -17,7 +17,6 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   const [correctCount, setCorrectCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
-  const [currentOptions, setCurrentOptions] = useState<number[]>([]);
 
   const timer = useTimer({
     initialSeconds: 120,
@@ -32,39 +31,42 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
       setLoading(false);
       timer.start();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Генерируем варианты ответов при смене вопроса
-  useEffect(() => {
-    if (problems.length > 0 && currentIndex < problems.length) {
-      const correct = problems[currentIndex].answer;
-      const options = [correct];
-
-      // Генерируем 3 неправильных варианта
-      const offsets = [1, 2, 3];
-      for (const offset of offsets) {
-        const variant = correct + (offset % 2 === 0 ? offset : -offset);
-        if (variant > 0) {
-          options.push(variant);
-        } else {
-          options.push(correct + offset);
-        }
-      }
-
-      // Убедимся что есть ровно 4 варианта
-      const finalOptions = options.slice(0, 4);
-      if (!finalOptions.includes(correct)) {
-        finalOptions[0] = correct;
-      }
-
-      // Перемешиваем варианты (Fisher-Yates shuffle)
-      for (let i = finalOptions.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [finalOptions[i], finalOptions[j]] = [finalOptions[j], finalOptions[i]];
-      }
-
-      setCurrentOptions(finalOptions);
+  const currentOptions = useMemo(() => {
+    if (problems.length === 0 || currentIndex >= problems.length) {
+      return [];
     }
+
+    const correct = problems[currentIndex].answer;
+    const options = [correct];
+
+    // Генерируем 3 неправильных варианта
+    const offsets = [1, 2, 3];
+    for (const offset of offsets) {
+      const variant = correct + (offset % 2 === 0 ? offset : -offset);
+      if (variant > 0) {
+        options.push(variant);
+      } else {
+        options.push(correct + offset);
+      }
+    }
+
+    // Убедимся что есть ровно 4 варианта
+    const finalOptions = options.slice(0, 4);
+    if (!finalOptions.includes(correct)) {
+      finalOptions[0] = correct;
+    }
+
+    // Перемешиваем варианты (Fisher-Yates shuffle)
+    for (let i = finalOptions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [finalOptions[i], finalOptions[j]] = [finalOptions[j], finalOptions[i]];
+    }
+
+    return finalOptions;
   }, [currentIndex, problems]);
 
   const finishExercise = () => {

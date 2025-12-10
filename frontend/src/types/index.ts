@@ -40,7 +40,7 @@ export interface ExerciseResult {
   time_seconds: number;
   correct_answers: number;
   total_questions: number;
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
 }
 
 export interface SessionResults {
