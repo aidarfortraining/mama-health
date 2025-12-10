@@ -36,9 +36,12 @@ describe('StroopExercise', () => {
         vi.mocked(api.getStroopTest).mockResolvedValue(mockStroopData);
     });
 
-    it('shows loading state initially', () => {
+    it('shows loading state initially', async () => {
         render(<StroopExercise onComplete={vi.fn()} />);
         expect(screen.getByText('Загрузка...')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(api.getStroopTest).toHaveBeenCalled();
+        });
     });
 
     it('displays word with different color (Stroop effect)', async () => {

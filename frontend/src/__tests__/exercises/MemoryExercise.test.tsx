@@ -33,9 +33,12 @@ describe('MemoryExercise', () => {
         vi.mocked(api.getMemoryWords).mockResolvedValue(mockMemoryData);
     });
 
-    it('shows loading state initially', () => {
+    it('shows loading state initially', async () => {
         render(<MemoryExercise onComplete={vi.fn()} />);
         expect(screen.getByText('Загрузка...')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(api.getMemoryWords).toHaveBeenCalled();
+        });
     });
 
     it('displays words in memorize phase', async () => {

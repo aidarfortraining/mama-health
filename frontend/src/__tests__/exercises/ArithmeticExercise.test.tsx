@@ -36,9 +36,12 @@ describe('ArithmeticExercise', () => {
         vi.mocked(api.getArithmeticProblems).mockResolvedValue(mockProblems);
     });
 
-    it('shows loading state initially', () => {
+    it('shows loading state initially', async () => {
         render(<ArithmeticExercise onComplete={vi.fn()} />);
         expect(screen.getByText('Загрузка...')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(api.getArithmeticProblems).toHaveBeenCalled();
+        });
     });
 
     it('displays problem after loading', async () => {
