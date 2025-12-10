@@ -52,3 +52,6 @@ Thumbs.db
 
 # Claude/Gemini
 .claude/
+
+# Windows reserved names
+nul
