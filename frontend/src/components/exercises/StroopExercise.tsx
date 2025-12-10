@@ -11,13 +11,14 @@ interface StroopExerciseProps {
   onComplete: (result: ExerciseResult) => void;
 }
 
-const COLOR_OPTIONS = ['красный', 'синий', 'зелёный', 'жёлтый', 'оранжевый', 'фиолетовый'];
+const COLOR_OPTIONS = ['красный', 'синий', 'зелёный', 'жёлтый', 'чёрный'];
 
 export function StroopExercise({ onComplete }: StroopExerciseProps) {
   const [items, setItems] = useState<StroopItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [finished, setFinished] = useState(false);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
 
   const timer = useTimer({
@@ -36,6 +37,7 @@ export function StroopExercise({ onComplete }: StroopExerciseProps) {
 
   const finishExercise = () => {
     timer.stop();
+    setFinished(true);
     onComplete({
       exercise_type: 'stroop',
       score: correctCount,
@@ -67,6 +69,16 @@ export function StroopExercise({ onComplete }: StroopExerciseProps) {
     return (
       <Card className="max-w-2xl mx-auto text-center">
         <p className="text-body">Загрузка...</p>
+      </Card>
+    );
+  }
+
+  if (finished) {
+    return (
+      <Card className="max-w-2xl mx-auto text-center">
+        <h1 className="text-heading text-success mb-4">Отлично!</h1>
+        <p className="text-body">Правильных ответов: {correctCount} из {items.length}</p>
+        <p className="text-small text-gray-500 mt-4">Переход к следующему упражнению...</p>
       </Card>
     );
   }

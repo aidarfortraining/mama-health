@@ -41,8 +41,19 @@ export function CountingExercise({ onComplete }: CountingExerciseProps) {
       {phase === 'counting' && (
         <>
           <div className="mb-8">
-            <p className="text-display text-primary mb-4">1 120</p>
-            <p className="text-body text-gray-600">Считайте вслух!</p>
+            <div className="flex items-center justify-center gap-8 mb-6">
+              <div className="text-center">
+                <div className="text-display text-primary font-bold">1</div>
+                <div className="text-small text-gray-500">Начало</div>
+              </div>
+              <div className="text-heading text-gray-400">→</div>
+              <div className="text-center">
+                <div className="text-display text-primary font-bold">120</div>
+                <div className="text-small text-gray-500">Конец</div>
+              </div>
+            </div>
+            <p className="text-large text-gray-700 font-semibold">Считайте вслух от 1 до 120!</p>
+            <p className="text-body text-gray-500 mt-2">Произносите числа чётко и громко</p>
           </div>
 
           <Timer formatted={timer.formatted} label="Время" />

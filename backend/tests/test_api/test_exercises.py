@@ -18,10 +18,10 @@ class TestArithmeticEndpoint:
         assert isinstance(data["problems"], list)
 
     @pytest.mark.asyncio
-    async def test_returns_100_problems(self, client: AsyncClient):
+    async def test_returns_50_problems(self, client: AsyncClient):
         response = await client.get("/api/exercises/arithmetic")
         data = response.json()
-        assert len(data["problems"]) == 100
+        assert len(data["problems"]) == 50
 
     @pytest.mark.asyncio
     async def test_problem_structure(self, client: AsyncClient):

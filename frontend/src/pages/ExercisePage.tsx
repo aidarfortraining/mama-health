@@ -21,8 +21,11 @@ export function ExercisePage() {
 
     const currentIndex = exerciseOrder.indexOf(exerciseType);
     if (currentIndex < exerciseOrder.length - 1) {
+      const nextExercise = exerciseOrder[currentIndex + 1];
       setTimeout(() => {
-        setCurrentExercise(exerciseOrder[currentIndex + 1]);
+        setCurrentExercise(nextExercise);
+        // Меняем URL при переходе к следующему упражнению
+        navigate(`/exercise/${nextExercise}`, { replace: true });
       }, 2000);
     } else {
       navigate('/results', { state: { results: { ...results, [exerciseType]: result } } });

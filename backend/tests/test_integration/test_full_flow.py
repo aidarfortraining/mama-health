@@ -18,7 +18,7 @@ class TestFullTrainingFlow:
         arithmetic_response = await client.get("/api/exercises/arithmetic")
         assert arithmetic_response.status_code == 200
         problems = arithmetic_response.json()["problems"]
-        assert len(problems) == 100
+        assert len(problems) == 50
 
         # 3. Сохраняем результат арифметики
         arithmetic_result = {

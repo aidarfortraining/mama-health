@@ -17,6 +17,7 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   const [correctCount, setCorrectCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const [currentOptions, setCurrentOptions] = useState<number[]>([]);
 
   const timer = useTimer({
     initialSeconds: 120,
@@ -26,11 +27,45 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
 
   useEffect(() => {
     api.getArithmeticProblems().then(data => {
-      setProblems(data.problems);
+      // Берем только первые 50 проблем
+      setProblems(data.problems.slice(0, 50));
       setLoading(false);
       timer.start();
     });
   }, []);
+
+  // Генерируем варианты ответов при смене вопроса
+  useEffect(() => {
+    if (problems.length > 0 && currentIndex < problems.length) {
+      const correct = problems[currentIndex].answer;
+      const options = [correct];
+
+      // Генерируем 3 неправильных варианта
+      const offsets = [1, 2, 3];
+      for (const offset of offsets) {
+        const variant = correct + (offset % 2 === 0 ? offset : -offset);
+        if (variant > 0) {
+          options.push(variant);
+        } else {
+          options.push(correct + offset);
+        }
+      }
+
+      // Убедимся что есть ровно 4 варианта
+      const finalOptions = options.slice(0, 4);
+      if (!finalOptions.includes(correct)) {
+        finalOptions[0] = correct;
+      }
+
+      // Перемешиваем варианты (Fisher-Yates shuffle)
+      for (let i = finalOptions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [finalOptions[i], finalOptions[j]] = [finalOptions[j], finalOptions[i]];
+      }
+
+      setCurrentOptions(finalOptions);
+    }
+  }, [currentIndex, problems]);
 
   const finishExercise = () => {
     timer.stop();
@@ -61,19 +96,7 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
     }, 300);
   };
 
-  const generateOptions = (correct: number): number[] => {
-    const options = [correct];
-    while (options.length < 4) {
-      const offset = Math.floor(Math.random() * 5) + 1;
-      const variant = correct + (Math.random() > 0.5 ? offset : -offset);
-      if (variant > 0 && !options.includes(variant)) {
-        options.push(variant);
-      }
-    }
-    return options.sort(() => Math.random() - 0.5);
-  };
-
-  if (loading) {
+  if (loading || currentOptions.length === 0) {
     return (
       <Card className="max-w-2xl mx-auto text-center">
         <p className="text-body">Загрузка...</p>
@@ -82,7 +105,6 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   }
 
   const currentProblem = problems[currentIndex];
-  const options = generateOptions(currentProblem.answer);
 
   return (
     <Card className="max-w-2xl mx-auto">
@@ -112,7 +134,7 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
           feedback === 'wrong' ? 'bg-red-100' : ''
         } rounded-xl p-4`}
       >
-        {options.map((option, idx) => (
+        {currentOptions.map((option, idx) => (
           <Button
             key={idx}
             variant="outline"

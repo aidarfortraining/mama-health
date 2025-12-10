@@ -10,7 +10,7 @@ router = APIRouter(prefix="/api/exercises", tags=["exercises"])
 
 @router.get("/arithmetic", response_model=ArithmeticResponse)
 async def get_arithmetic_problems(db: AsyncSession = Depends(get_db)):
-    problems = await math_service.get_random_problems(db, count=100)
+    problems = await math_service.get_random_problems(db, count=50)
     return ArithmeticResponse(problems=problems, time_limit_seconds=120)
 
 @router.get("/reading", response_model=ReadingTextOut)
