@@ -24,7 +24,8 @@ mama_health/
 ### Backend
 ```bash
 cd backend
-python -m venv venv && venv\Scripts\activate
+# python -m venv venv && 
+venv\Scripts\activate
 pip install -r requirements.txt
 python seed_data.py
 uvicorn app.main:app --reload

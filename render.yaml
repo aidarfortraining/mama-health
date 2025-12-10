@@ -29,7 +29,7 @@ services:
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     envVars:
-      - key: API_URL
+      - key: https://brain-training-api.onrender.com
         # This will be the URL of your backend service
         # Replace with actual backend URL after first deploy
         fromService:
