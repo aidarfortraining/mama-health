@@ -9,7 +9,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies (including devDependencies needed for build)
-RUN npm ci --ignore-scripts
+# --legacy-peer-deps: ignore peer dependency conflicts (React 19 vs testing-library/react 14)
+RUN npm ci --legacy-peer-deps --ignore-scripts
 
 # Copy application code
 COPY . .
