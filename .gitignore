@@ -72,3 +72,4 @@ htmlcov/
 
 # Render specific
 .render/
+.playwright-mcp/

@@ -36,12 +36,12 @@
 
 ```bash
 cd backend
-python -m venv venv
+# python -m venv venv
 venv\Scripts\activate              # Windows
 # source venv/bin/activate         # Linux/Mac
 
-pip install -r requirements.txt
-pip install aiosqlite             # SQLite async driver
+# pip install -r requirements.txt
+# pip install aiosqlite             # SQLite async driver
 python seed_data.py               # Создать БД с тестовыми данными
 uvicorn app.main:app --reload     # http://localhost:8000
 ```
@@ -50,7 +50,7 @@ uvicorn app.main:app --reload     # http://localhost:8000
 
 ```bash
 cd frontend
-npm install
+# npm install
 npm run dev                       # http://localhost:5173
 ```
 

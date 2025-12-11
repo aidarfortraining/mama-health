@@ -122,12 +122,30 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
     );
   }
 
-  if (loading || problems.length === 0 || currentOptions.length === 0) {
+  if (loading) {
     return (
       <Card className="max-w-2xl mx-auto text-center">
         <div className="py-8">
           <div className="animate-spin w-12 h-12 sm:w-16 sm:h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-base sm:text-lg md:text-xl text-gray-600">Загрузка упражнения...</p>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-2">Загрузка упражнения...</p>
+          <p className="text-sm text-gray-500">Это может занять некоторое время при первом запуске</p>
+        </div>
+      </Card>
+    );
+  }
+
+  if (problems.length === 0 || currentOptions.length === 0) {
+    return (
+      <Card className="max-w-2xl mx-auto text-center">
+        <div className="py-8">
+          <div className="text-5xl mb-4">📭</div>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-700 mb-4">Нет доступных упражнений</h2>
+          <p className="text-base sm:text-lg text-gray-600 mb-6">
+            К сожалению, список примеров пуст. Попробуйте позже или обратитесь к администратору.
+          </p>
+          <Button onClick={() => window.location.reload()}>
+            Попробовать снова
+          </Button>
         </div>
       </Card>
     );

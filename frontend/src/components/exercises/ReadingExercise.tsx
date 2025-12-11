@@ -35,12 +35,30 @@ export function ReadingExercise({ onComplete }: ReadingExerciseProps) {
     onComplete({ completed: true, time_seconds: timer.seconds });
   };
 
-  if (loading || !text) {
+  if (loading) {
     return (
       <Card className="max-w-3xl mx-auto text-center">
         <div className="py-8">
           <div className="animate-spin w-12 h-12 sm:w-16 sm:h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-base sm:text-lg md:text-xl text-gray-600">Загрузка текста...</p>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-2">Загрузка текста...</p>
+          <p className="text-sm text-gray-500">Это может занять некоторое время</p>
+        </div>
+      </Card>
+    );
+  }
+
+  if (!text) {
+    return (
+      <Card className="max-w-3xl mx-auto text-center">
+        <div className="py-8">
+          <div className="text-5xl mb-4">📭</div>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-700 mb-4">Нет доступных текстов</h2>
+          <p className="text-base sm:text-lg text-gray-600 mb-6">
+            К сожалению, мы не нашли подходящего текста. Попробуйте обновить страницу.
+          </p>
+          <Button onClick={() => window.location.reload()}>
+            Обновить страницу
+          </Button>
         </div>
       </Card>
     );
