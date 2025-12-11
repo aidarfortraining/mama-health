@@ -18,6 +18,7 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
   const [finished, setFinished] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const timer = useTimer({
     initialSeconds: 120,
@@ -26,12 +27,18 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   });
 
   useEffect(() => {
-    api.getArithmeticProblems().then(data => {
-      // Берем только первые 50 проблем
-      setProblems(data.problems.slice(0, 50));
-      setLoading(false);
-      timer.start();
-    });
+    api.getArithmeticProblems()
+      .then(data => {
+        // Берем только первые 50 проблем
+        setProblems(data.problems.slice(0, 50));
+        setLoading(false);
+        timer.start();
+      })
+      .catch(err => {
+        console.error('Failed to load arithmetic problems:', err);
+        setError('Не удалось загрузить упражнение. Проверьте подключение к серверу.');
+        setLoading(false);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -100,7 +107,22 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
     }, 300);
   };
 
-  if (loading || currentOptions.length === 0) {
+  if (error) {
+    return (
+      <Card className="max-w-2xl mx-auto text-center">
+        <div className="py-8">
+          <div className="text-5xl mb-4">⚠️</div>
+          <h2 className="text-xl sm:text-2xl font-bold text-danger mb-4">Ошибка загрузки</h2>
+          <p className="text-base sm:text-lg text-gray-700 mb-6">{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Обновить страницу
+          </Button>
+        </div>
+      </Card>
+    );
+  }
+
+  if (loading || problems.length === 0 || currentOptions.length === 0) {
     return (
       <Card className="max-w-2xl mx-auto text-center">
         <div className="py-8">
