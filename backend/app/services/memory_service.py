@@ -14,4 +14,6 @@ async def get_memory_words(db: AsyncSession, word_count: int = 12) -> List[str]:
         all_words.extend(wl.words)
 
     random.shuffle(all_words)
-    return all_words[:word_count]
+    words = all_words[:word_count]
+
+    return words

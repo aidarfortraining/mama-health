@@ -18,8 +18,18 @@ async def create_session(db: AsyncSession = Depends(get_db)):
 
 @router.post("/results", response_model=ExerciseResultOut)
 async def save_result(data: ExerciseResultCreate, db: AsyncSession = Depends(get_db)):
+    session_id = data.session_id
+
+    # If session_id not provided, create a new training session so results are not orphaned.
+    if session_id is None:
+        new_session = TrainingSession()
+        db.add(new_session)
+        await db.commit()
+        await db.refresh(new_session)
+        session_id = new_session.id
+
     result = ExerciseResult(
-        session_id=data.session_id,
+        session_id=session_id,
         exercise_type=data.exercise_type,
         score=data.score,
         time_seconds=data.time_seconds,
@@ -30,6 +40,7 @@ async def save_result(data: ExerciseResultCreate, db: AsyncSession = Depends(get
     db.add(result)
     await db.commit()
     await db.refresh(result)
+
     return result
 
 @router.get("/sessions/{session_id}", response_model=SessionOut)
@@ -54,5 +65,5 @@ async def get_session(session_id: int, db: AsyncSession = Depends(get_db)):
             total_questions=r.total_questions
         ) for r in session.results
     ]
-    
+
     return SessionOut(id=session.id, total_score=total_score, results=result_list)
