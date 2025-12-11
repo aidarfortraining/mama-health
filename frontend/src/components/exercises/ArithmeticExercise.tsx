@@ -17,6 +17,7 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
   const [correctCount, setCorrectCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [feedback, setFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const [finished, setFinished] = useState(false);
 
   const timer = useTimer({
     initialSeconds: 120,
@@ -71,6 +72,7 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
 
   const finishExercise = () => {
     timer.stop();
+    setFinished(true); // Show summary view
     onComplete({
       exercise_type: 'arithmetic',
       score: correctCount,
@@ -105,6 +107,19 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
           <div className="animate-spin w-12 h-12 sm:w-16 sm:h-16 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-base sm:text-lg md:text-xl text-gray-600">Загрузка упражнения...</p>
         </div>
+      </Card>
+    );
+  }
+
+  if (finished) {
+    return (
+      <Card className="max-w-2xl mx-auto text-center animate-fade-in">
+        <div className="text-5xl sm:text-6xl md:text-7xl mb-4">🎉</div>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl text-success font-bold mb-4">Отлично!</h1>
+        <p className="text-base sm:text-lg md:text-xl text-gray-700">
+          Правильных ответов: <span className="font-bold text-primary">{correctCount}</span> из {problems.length}
+        </p>
+        <p className="text-sm sm:text-base text-gray-500 mt-4">Переход к следующему упражнению...</p>
       </Card>
     );
   }
@@ -149,8 +164,8 @@ export function ArithmeticExercise({ onComplete }: ArithmeticExerciseProps) {
           ${feedback === 'correct'
             ? 'bg-gradient-to-br from-green-50 to-green-100 shadow-lg animate-bounce-in'
             : feedback === 'wrong'
-            ? 'bg-gradient-to-br from-red-50 to-red-100 animate-shake'
-            : 'bg-transparent'}
+              ? 'bg-gradient-to-br from-red-50 to-red-100 animate-shake'
+              : 'bg-transparent'}
         `}
       >
         {currentOptions.map((option, idx) => (

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CountingExercise } from '../components/exercises/CountingExercise';
 import { ArithmeticExercise } from '../components/exercises/ArithmeticExercise';
@@ -15,6 +15,12 @@ export function ExercisePage() {
   const navigate = useNavigate();
   const [results, setResults] = useState<SessionResults>({});
   const [currentExercise, setCurrentExercise] = useState(type || 'counting');
+
+  useEffect(() => {
+    if (type) {
+      setCurrentExercise(type);
+    }
+  }, [type]);
 
   const handleComplete = (
     exerciseType: string,
